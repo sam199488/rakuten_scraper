@@ -16,7 +16,7 @@ app = Flask(__name__)
 def urlify(s):
      # Remove all non-word characters (everything except numbers and letters)
      s = re.sub(r"[^\w\s]", '', s)
-     # Replace all runs of whitespace with a single dash
+     # Replace all runs of whitespace with a '+'
      s = re.sub(r"\s+", '+', s)
      return s
 
@@ -39,9 +39,6 @@ def getResults(item_name = 'luxury handbags', number_pages = 5):
             seller_url = 'https://global.rakuten.com' + element.find("div", class_="b-content b-text-overflow b-text-small b-text-sub").a['href']
             item = {'url' : url, 'description' : description, 'price' : price, 'picture_url' : picture_url, 'seller_name' : seller_name, 'seller_url' : seller_url}
             results.append(item)
-        results.append(
-            {'url': "****", 'description': "****", 'price': "****", 'picture_url': "****", 'seller_name': "****",
-             'seller_url': "****"})
     print("nombre de resultats "+str(len(results)))
     return json.dumps(results)
 
