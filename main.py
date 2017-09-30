@@ -1,10 +1,11 @@
 from builtins import len
-
+from flask import jsonify , make_response
 from flask import Flask
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import json
 import re
+from flask import request
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ app = Flask(__name__)
 
 
 
-
+#function that urlify strings (ex "luxury bags" ==> "luxury+bags" )
 def urlify(s):
      # Remove all non-word characters (everything except numbers and letters)
      s = re.sub(r"[^\w\s]", '', s)
@@ -43,13 +44,18 @@ def getResults(item_name = 'luxury handbags', number_pages = 5):
     return json.dumps(results)
 
 
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 
 
 @app.route('/items')
 def hello_world():
-    return getResults()
+    q = request.args.get('q', default=1, type=str)
+    nb = request.args.get('nb', default='luxury handbags', type=int)
+    return getResults(q,nb)
 
 
 if __name__ == '__main__':
